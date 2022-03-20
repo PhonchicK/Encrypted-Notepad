@@ -23,12 +23,6 @@ namespace DataAccess.Concrete.EntityFramework
                 .WithOptional(c => c.Folder)
                 .HasForeignKey(c => c.FolderID)
                 .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Folder>()
-                .HasMany(c => c.Folders)
-                .WithOptional(c => c.ParentFolder)
-                .HasForeignKey(c => c.ParentFolderID)
-                .WillCascadeOnDelete(false);
         }
         public DbSet<Note> Notes { get; set; }
         public DbSet<Folder> Folders { get; set; }

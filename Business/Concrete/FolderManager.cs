@@ -31,11 +31,6 @@ namespace Business.Concrete
             return folderDal.GetAll();
         }
 
-        public List<Folder> GetAllByFolderID(int folderId)
-        {
-            return folderDal.GetAll(f => f.ParentFolderID == folderId);
-        }
-
         public Folder GetByID(int id)
         {
             return folderDal.Get(f => f.ID == id);

@@ -12,7 +12,7 @@
                  Background="Black"
                  BorderThickness="0"
                  SelectionMode="Single" 
-                 MouseDoubleClick="NotesListView_MouseDoubleClick">
+                 MouseDoubleClick="NotesListView_MouseDoubleClick" ContextMenuOpening="NotesListView_ContextMenuOpening">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical"
@@ -28,6 +28,12 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Focusable" Value="False"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True" Orientation="Horizontal"  />
@@ -42,7 +48,7 @@
                         <MenuItem Header="File"/>
                     </MenuItem>
                     <MenuItem x:Name="NotesListContextMenuDeleteButton" Header="Delete"/>
-                    <MenuItem Header=""/>
+                    <MenuItem x:Name="NotesListContextMenuDownloadButton" Header="Download"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>

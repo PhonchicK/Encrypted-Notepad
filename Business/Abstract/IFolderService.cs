@@ -10,7 +10,6 @@ namespace Business.Abstract
     public interface IFolderService
     {
         List<Folder> GetAll();
-        List<Folder> GetAllByFolderID(int folderId);
         Folder GetByID(int id);
         void Add(Folder folder);
         void Update(Folder folder);
