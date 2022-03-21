@@ -9,24 +9,27 @@
         Height="450" 
         Width="800" 
         Loaded="Window_Loaded" 
-        Background="Black" 
+        Background="#1e1e1e" 
         WindowStyle="None" 
         AllowsTransparency="True">
     <Grid>
         <DockPanel VerticalAlignment="Top" 
                    Height="35"
-                   Background="HotPink" 
+                   Background="#2D2D30" 
                    MouseDown="DockPanel_MouseDown">
             <Button Width="35"
                     BorderThickness="0"
-                    Background="LightPink"
+                    Background="#007ACC"
                     HorizontalAlignment="Right"
                     Content="X"
+                    Foreground="AntiqueWhite"
                     Click="ExitButton_Click"/>
-        </DockPanel>
+        </DockPanel> 
         <Frame x:Name="MainFrame"
                Height="415" 
                Width="800"
-               Margin="0,35,0,0"/>
+               Margin="0,35,0,0"
+               NavigationUIVisibility="Hidden"
+               Navigating="MainFrame_Navigating"/>
     </Grid>
 </Window>

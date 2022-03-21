@@ -19,7 +19,7 @@ namespace Core.Utilites.Security.Cryption
                 {
                     ICryptoTransform transform = tripDes.CreateEncryptor();
                     byte[] results = transform.TransformFinalBlock(data, 0, data.Length);
-                    return Convert.ToBase64String(results, 0, results.Length);
+                    return Convert.ToBase64String(results);
                 }
             }
         }
@@ -27,6 +27,8 @@ namespace Core.Utilites.Security.Cryption
         public static byte[] Decrypt(string text, string pass)
         {
             pass = pass == null ? "" : pass;
+            if (text == null)
+                return new byte[] { };
             byte[] data = Convert.FromBase64String(text);
             using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
             {

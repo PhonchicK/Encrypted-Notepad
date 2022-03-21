@@ -5,14 +5,18 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfUI.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="415" d:DesignWidth="800" Loaded="Page_Loaded">
+      d:DesignHeight="415" 
+      d:DesignWidth="800" 
+      Loaded="Page_Loaded">
     <Grid>
         <ListBox x:Name="NotesListView" 
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 Background="Black"
+                 Background="#1e1e1e"
                  BorderThickness="0"
                  SelectionMode="Single" 
-                 MouseDoubleClick="NotesListView_MouseDoubleClick" ContextMenuOpening="NotesListView_ContextMenuOpening">
+                 MouseDoubleClick="NotesListView_MouseDoubleClick" 
+                 ContextMenuOpening="NotesListView_ContextMenuOpening" 
+                 MouseDown="NotesListView_MouseDown">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical"
@@ -28,29 +32,75 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="Focusable" Value="False"/>
-                </Style>
-            </ListBox.ItemContainerStyle>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True" Orientation="Horizontal"  />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ContextMenu>
-                <ContextMenu>
-                    <MenuItem x:Name="NotesListContextMenuOpenButton" Header="Open"/>
+                <ContextMenu x:Name="NotesListContextMenu">
+                    <MenuItem x:Name="NotesListContextMenuOpenButton" 
+                              Header="Open"
+                              Click="NotesListContextMenuOpenButton_Click"/>
                     <MenuItem Header="New">
-                        <MenuItem Header="Note"/>
-                        <MenuItem Header="Folder"/>
-                        <MenuItem Header="File"/>
+                        <MenuItem Header="Note" 
+                                  Click="MenuItemNew_Click"/>
+                        <MenuItem Header="Folder" 
+                                  Click="MenuItemNew_Click"/>
+                        <MenuItem Header="File" 
+                                  Click="MenuItemNew_Click"/>
                     </MenuItem>
-                    <MenuItem x:Name="NotesListContextMenuDeleteButton" Header="Delete"/>
-                    <MenuItem x:Name="NotesListContextMenuDownloadButton" Header="Download"/>
+                    <MenuItem x:Name="NotesListContextMenuDeleteButton" 
+                              Header="Delete"
+                              Click="NotesListContextMenuDeleteButton_Click"/>
+                    <MenuItem x:Name="NotesListContextMenuDownloadButton" 
+                              Header="Download"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
+            <ListBox.Resources>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <Border x:Name="Bd"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="true">
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="Selector.IsSelectionActive"
+                                            Value="False" />
+                                            <Condition Property="IsSelected"
+                                            Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background"
+                                    TargetName="Bd"
+                                    Value="#2D2D30" />
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="Selector.IsSelectionActive"
+                                            Value="True" />
+                                            <Condition Property="IsSelected"
+                                            Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background"
+                                    TargetName="Bd"
+                                    Value="#2D2D30" />
+                                    </MultiTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.Resources>
         </ListBox>
     </Grid>
 </Page>

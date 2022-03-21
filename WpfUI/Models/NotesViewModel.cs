@@ -17,6 +17,8 @@ namespace WpfUI.Models
             this.Type = note.Type;
             this.Image = "pack://application:,,,/images/" + (Type == "text" ? "text.png" : NoteImageHelper.GetFileImage(Name));
             this.IsFile = note.Type == "file";
+            this.Password = note.Password;
+            this.HavePassword = !string.IsNullOrEmpty(note.Password);
         }
         public NotesViewModel(Folder folder)
         {
@@ -25,6 +27,8 @@ namespace WpfUI.Models
             this.Type = "folder";
             this.Image = "pack://application:,,,/images/folder.png";
             this.IsFolder = true;
+            this.Password = folder.Password;
+            this.HavePassword = !string.IsNullOrEmpty(folder.Password);
         }
         public NotesViewModel()
         { }
@@ -32,6 +36,8 @@ namespace WpfUI.Models
         public string Name { get; set; }
         public string Type { get; set; }
         public string Image { get; set; }
+        public string Password { get; set; }
+        public bool HavePassword { get; set; }
         public bool IsFolder { get; set; } = false;
         public bool IsFile { get; set; } = false;
     }

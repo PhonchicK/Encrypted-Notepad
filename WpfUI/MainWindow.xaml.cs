@@ -26,14 +26,37 @@ namespace WpfUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Variables
+        public static MainWindow instance;
+
+        //Forms
+        public NotesList notesList;
+        NoteDetails noteDetails;
+
+        //Services
         private INoteService noteService;
-        NotesList notesList;
+
         public MainWindow()
         {
             noteService = InstanceFactory.GetInstance<INoteService>();
+
+            instance = this;
             notesList = new NotesList();
+
             InitializeComponent();
         }
+        #region Navigation Methods
+        public void BackToNotesList()
+        {
+            MainFrame.Navigate(notesList);
+        }
+
+        public void OpenNote(Note note, string password = "")
+        {
+            noteDetails = new NoteDetails(note, password);
+            MainFrame.Navigate(noteDetails);
+        }
+        #endregion
         #region Form Methods
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -49,16 +72,15 @@ namespace WpfUI
         {
             Environment.Exit(0);
         }
+        private void MainFrame_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            if (e.NavigationMode == NavigationMode.Forward
+                || e.NavigationMode == NavigationMode.Back
+                || e.NavigationMode == NavigationMode.Refresh)
+            {
+                e.Cancel = true;
+            }
+        }
         #endregion
-
-        private void NotesListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //var item = (NotesListView.SelectedItem as NotesViewModel);
-        }
-
-        private void NotesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //(sender as ListBox).SelectedItem = null;
-        }
     }
 }
