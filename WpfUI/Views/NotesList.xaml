@@ -15,7 +15,8 @@
                 HorizontalAlignment="Left"
                 Background="#007ACC"
                 Foreground="AntiqueWhite"
-                Panel.ZIndex="1" Click="backButton_Click"/>
+                Panel.ZIndex="1" 
+                Click="backButton_Click"/>
         <ListBox x:Name="NotesListView" 
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Background="#1e1e1e"

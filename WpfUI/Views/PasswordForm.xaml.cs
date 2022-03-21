@@ -19,10 +19,12 @@ namespace WpfUI.Views
     /// </summary>
     public partial class PasswordForm : Window
     {
+        public bool CanEmpty { get; set; } = false;
         public string Password { get; set; }
-        public PasswordForm()
+        public PasswordForm(bool canEmpty = false)
         {
             InitializeComponent();
+            CanEmpty = canEmpty;
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
@@ -37,7 +39,7 @@ namespace WpfUI.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(passwordBox.Password))
+            if (string.IsNullOrWhiteSpace(passwordBox.Password) && !CanEmpty)
                 return;
             Password = passwordBox.Password;
             this.DialogResult = true;

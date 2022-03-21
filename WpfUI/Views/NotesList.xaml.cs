@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.DependencyResolvers.Ninject;
 using Entities.Concrete;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,10 @@ namespace WpfUI.Views
         //Forms
         private PasswordForm passwordForm;
         private NamePasswordForm namePasswordForm;
+        private FileLoadForm fileLoadForm;
+
+        //Dialogs
+        private OpenFileDialog openFileDialog;
 
         //Services
         private INoteService noteService;
@@ -148,6 +153,50 @@ namespace WpfUI.Views
                 LoadNotes();
             }
         }
+        private void NewFile(List<string> files = null)
+        {
+            if(files == null)
+            {
+                openFileDialog = new OpenFileDialog()
+                {
+                    Multiselect = true,
+                    RestoreDirectory = true
+                };
+                if(openFileDialog.ShowDialog().GetValueOrDefault(false))
+                {
+                    files = openFileDialog.FileNames.ToList();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            //if files is null, select new files
+
+            string password = "";
+
+            if (folder == null)
+            {
+                passwordForm = new PasswordForm(true);
+                if (passwordForm.ShowDialog().GetValueOrDefault(false))
+                {
+                    password = passwordForm.Password;
+                }
+                else
+                    return;
+            }
+            else
+            {
+                password = folderPassword;
+            }
+            //if in folder, password is folder's password
+
+            fileLoadForm = new FileLoadForm(files, password,
+                        folder?.ID);
+            fileLoadForm.ShowDialog();
+
+            LoadNotes();
+        }
         #endregion
 
         #region Context Menu Methods
@@ -190,6 +239,7 @@ namespace WpfUI.Views
             {
                 case "Note": NewNote(); break;
                 case "Folder": NewFolder(); break;
+                case "File": NewFile(); break;
             }
         }
         #endregion

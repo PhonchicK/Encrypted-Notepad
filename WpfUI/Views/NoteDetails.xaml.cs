@@ -54,11 +54,11 @@ namespace WpfUI.Views
         private void LoadNote()
         {
             textBoxContent.Document.Blocks.Clear();
-            textBoxContent.AppendText(NoteEncryptionHelper.DecryptText(currentNote.Content, currentPassword));
+            textBoxContent.AppendText(NoteCryptionHelper.DecryptText(currentNote.Content, currentPassword));
         }
         private void SaveNote()
         {
-            currentNote.Content = NoteEncryptionHelper.EncryptText(GetContentText(), currentPassword);
+            currentNote.Content = NoteCryptionHelper.EncryptText(GetContentText(), currentPassword);
             noteService.Update(currentNote);
         }
         private void EditNote()
@@ -69,7 +69,7 @@ namespace WpfUI.Views
                 currentNote.Name = namePasswordForm.Name;
                 currentNote.Password = PasswordHelper.EncryptPassword(namePasswordForm.Password);
                 currentPassword = namePasswordForm.Password;
-                currentNote.Content = NoteEncryptionHelper.EncryptText(GetContentText(), currentPassword);
+                currentNote.Content = NoteCryptionHelper.EncryptText(GetContentText(), currentPassword);
 
                 noteService.Update(currentNote);
             }
