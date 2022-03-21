@@ -27,6 +27,7 @@ namespace WpfUI.Views
     {
         //Variables
         private Folder folder;//in of folder
+        private string folderPassword = "";
 
         //Forms
         private PasswordForm passwordForm;
@@ -50,9 +51,12 @@ namespace WpfUI.Views
         }
         #endregion
 
-        #region Note Methods
+        #region Note & Folder Methods
         public void LoadNotes()
         {
+            backButton.Visibility = folder != null ? Visibility.Visible : Visibility.Hidden;
+            //if not in folder, back button is hide
+
             List<NotesViewModel> notesViewModels = new List<NotesViewModel>();
             if (folder != null)
             {
@@ -82,14 +86,19 @@ namespace WpfUI.Views
                 passwordForm = new PasswordForm();
                 if (passwordForm.ShowDialog().GetValueOrDefault(false))
                 {
-                    folder = folderService.GetByID(model.ID);
+                    if (PasswordHelper.PasswordControl(model.Password, passwordForm.Password))
+                    {
+                        folder = folderService.GetByID(model.ID);
+                        folderPassword = passwordForm.Password;
 
-                    LoadNotes();
+                        LoadNotes();
+                    }
                 }
             }
             else
             {
                 folder = folderService.GetByID(model.ID);
+                folderPassword = "";
                 LoadNotes();
             }
         }
@@ -122,6 +131,19 @@ namespace WpfUI.Views
                     Password = PasswordHelper.EncryptPassword(namePasswordForm.Password),
                     Type = "text",
                     FolderID = folder?.ID
+                });
+                LoadNotes();
+            }
+        }
+        private void NewFolder()
+        {
+            namePasswordForm = new NamePasswordForm();
+            if (namePasswordForm.ShowDialog().GetValueOrDefault(false))
+            {
+                folderService.Add(new Folder()
+                {
+                    Name = namePasswordForm.Name,
+                    Password = PasswordHelper.EncryptPassword(namePasswordForm.Password),
                 });
                 LoadNotes();
             }
@@ -162,14 +184,23 @@ namespace WpfUI.Views
                 }
             }
         }
-        private void MenuItemNew_Click(object sender, RoutedEventArgs e)
+        private void NotesListContextMenuNewButton_Click(object sender, RoutedEventArgs e)
         {
             switch((sender as MenuItem).Header)
             {
                 case "Note": NewNote(); break;
+                case "Folder": NewFolder(); break;
             }
         }
         #endregion
+
+        #region Notes List View Methods
+        private void BackToParent()
+        {
+            folder = null;
+            folderPassword = "";
+            LoadNotes();
+        }
         private void NotesListView_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //if a list view item not under of cursor, selected item set null
@@ -192,6 +223,12 @@ namespace WpfUI.Views
             {
                 OpenNote(note);
             }
+        }
+        #endregion
+
+        private void backButton_Click(object sender, RoutedEventArgs e)
+        {
+            BackToParent();
         }
     }
 }

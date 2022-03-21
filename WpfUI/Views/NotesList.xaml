@@ -9,6 +9,13 @@
       d:DesignWidth="800" 
       Loaded="Page_Loaded">
     <Grid>
+        <Button x:Name="backButton"
+                Content="Back"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Background="#007ACC"
+                Foreground="AntiqueWhite"
+                Panel.ZIndex="1" Click="backButton_Click"/>
         <ListBox x:Name="NotesListView" 
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Background="#1e1e1e"
@@ -42,17 +49,21 @@
                     <MenuItem x:Name="NotesListContextMenuOpenButton" 
                               Header="Open"
                               Click="NotesListContextMenuOpenButton_Click"/>
+                    
                     <MenuItem Header="New">
                         <MenuItem Header="Note" 
-                                  Click="MenuItemNew_Click"/>
+                                  Click="NotesListContextMenuNewButton_Click"/>
+                        
                         <MenuItem Header="Folder" 
-                                  Click="MenuItemNew_Click"/>
+                                  Click="NotesListContextMenuNewButton_Click"/>
+                        
                         <MenuItem Header="File" 
-                                  Click="MenuItemNew_Click"/>
+                                  Click="NotesListContextMenuNewButton_Click"/>
                     </MenuItem>
                     <MenuItem x:Name="NotesListContextMenuDeleteButton" 
                               Header="Delete"
                               Click="NotesListContextMenuDeleteButton_Click"/>
+                    
                     <MenuItem x:Name="NotesListContextMenuDownloadButton" 
                               Header="Download"/>
                 </ContextMenu>
