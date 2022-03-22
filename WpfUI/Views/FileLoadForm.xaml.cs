@@ -56,7 +56,7 @@ namespace WpfUI.Views
                 {
                     Name = Path.GetFileName(item),
                     Password = PasswordHelper.EncryptPassword(password),
-                    Content = NoteCryptionHelper.EncryptFile(fileBytes),
+                    Content = NoteCryptionHelper.EncryptFile(fileBytes, password),
                     FolderID = folderId,
                     Type = "file"
                 });

@@ -9,27 +9,33 @@ namespace WpfUI.Helpers
 {
     public static class NoteCryptionHelper
     {
+        #region Text Cryption
         public static string EncryptText(string text, string password)
         {
             if (string.IsNullOrEmpty(password))
                 return text;
-            return CryptionHelper.Encrypt(UTF8Encoding.UTF8.GetBytes(text), password);
+            return CryptionHelper.Encrypt(Convert.FromBase64String(text), password);
         }
         public static string DecryptText(string encryptedText, string password)
         {
             if (string.IsNullOrEmpty(password))
                 return encryptedText;
-            return UTF8Encoding.UTF8.GetString(CryptionHelper.Decrypt(encryptedText, password));
+            byte[] data = CryptionHelper.Decrypt(Convert.FromBase64String(encryptedText), password);
+            return Convert.ToBase64String(data, 0, data.Length);
         }
+        #endregion
+        #region File Cryption
         public static string EncryptFile(byte[] fileByteArray, string password = "")
         {
             return string.IsNullOrEmpty(password) ? Convert.ToBase64String(fileByteArray) : 
                 CryptionHelper.Encrypt(fileByteArray, password);
         }
+
         public static byte[] DecryptFile(string encryptedText, string password = "")
         {
             return string.IsNullOrEmpty(password) ? Convert.FromBase64String(encryptedText) : 
-                CryptionHelper.Decrypt(encryptedText, password);
+                CryptionHelper.Decrypt(Convert.FromBase64String(encryptedText), password);
         }
+        #endregion
     }
 }

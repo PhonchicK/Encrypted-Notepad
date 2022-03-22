@@ -15,12 +15,12 @@ namespace WpfUI.Helpers
         {
             if (string.IsNullOrEmpty(password))
                 return "";
-            return CryptionHelper.Encrypt(UTF8Encoding.UTF8.GetBytes(PasswordString), password);
+            return CryptionHelper.Encrypt(Convert.FromBase64String(PasswordString), password);
         }
 
         public static bool PasswordControl(string encryptedPassword, string password)
         {
-            return UTF8Encoding.UTF8.GetString(CryptionHelper.Decrypt(encryptedPassword, password)) == PasswordString;
+            return Convert.ToBase64String(CryptionHelper.Decrypt(Convert.FromBase64String(encryptedPassword), password)) == PasswordString;
         }
     }
 }
