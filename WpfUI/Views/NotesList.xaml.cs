@@ -234,7 +234,6 @@ namespace WpfUI.Views
             NotesListContextMenuOpenButton.IsEnabled = note != null;
             NotesListContextMenuDownloadButton.IsEnabled = note != null ? note.IsFile : false;
         }
-
         private void NotesListContextMenuOpenButton_Click(object sender, RoutedEventArgs e)
         {
             NotesViewModel note = (NotesListView.SelectedItem as NotesViewModel);
@@ -304,6 +303,20 @@ namespace WpfUI.Views
             {
                 OpenNote(note);
             }
+        }
+        private void NotesListView_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effects = DragDropEffects.Move;
+        }
+        private void NotesListView_Drop(object sender, DragEventArgs e)
+        {
+            var dropped = ((string[])e.Data.GetData(DataFormats.FileDrop));
+            var files = dropped.ToList();
+            NewFile(files);
+        }
+        private void NotesListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            
         }
         #endregion
 

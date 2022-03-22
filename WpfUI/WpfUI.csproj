@@ -74,10 +74,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Helpers\FileTypeHelper.cs" />
     <Compile Include="Helpers\NoteCryptionHelper.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
     <Compile Include="Views\FileLoadForm.xaml.cs">
       <DependentUpon>FileLoadForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ImageView.xaml.cs">
+      <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NamePasswordForm.xaml.cs">
       <DependentUpon>NamePasswordForm.xaml</DependentUpon>
@@ -105,6 +110,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\FileLoadForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ImageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

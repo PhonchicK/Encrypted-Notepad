@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfUI.Helpers;
 using WpfUI.Models;
 using WpfUI.Views;
 
@@ -31,7 +32,8 @@ namespace WpfUI
 
         //Forms
         public NotesList notesList;
-        NoteDetails noteDetails;
+        private NoteDetails noteDetails;
+        private ImageView imageView;
 
         //Services
         private INoteService noteService;
@@ -45,6 +47,12 @@ namespace WpfUI
 
             InitializeComponent();
         }
+
+        public void OpenFile(Note note, string password = "")
+        {
+            FileHelper.SaveAndOpenFile(NoteCryptionHelper.DecryptFile(note.Content, password), note.Name);
+        }
+
         #region Navigation Methods
         public void BackToNotesList()
         {
@@ -53,8 +61,25 @@ namespace WpfUI
 
         public void OpenNote(Note note, string password = "")
         {
-            noteDetails = new NoteDetails(note, password);
-            MainFrame.Navigate(noteDetails);
+            if (note.Type == "text")
+            {
+                noteDetails = new NoteDetails(note, password);
+                MainFrame.Navigate(noteDetails);
+            }
+            else
+            {
+                switch(FileTypeHelper.GetFileType(note.Name))
+                {
+                    case "image":
+                        imageView = new ImageView(note, password);
+                        MainFrame.Navigate(imageView);
+                        break;
+
+                    default:
+                        OpenFile(note, password);
+                        break;
+                }
+            }
         }
         #endregion
         #region Form Methods

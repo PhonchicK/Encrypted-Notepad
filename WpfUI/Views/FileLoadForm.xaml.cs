@@ -52,11 +52,12 @@ namespace WpfUI.Views
             {
                 fileStatus.Content = Path.GetFileName(item);
                 byte[] fileBytes = File.ReadAllBytes(item);
+                string content = NoteCryptionHelper.EncryptFile(fileBytes, password);
                 noteService.Add(new Note()
                 {
                     Name = Path.GetFileName(item),
                     Password = PasswordHelper.EncryptPassword(password),
-                    Content = NoteCryptionHelper.EncryptFile(fileBytes, password),
+                    Content = content,
                     FolderID = folderId,
                     Type = "file"
                 });
