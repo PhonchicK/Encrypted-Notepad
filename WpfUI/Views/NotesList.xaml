@@ -27,13 +27,14 @@
                  ContextMenuOpening="NotesListView_ContextMenuOpening" 
                  MouseDown="NotesListView_MouseDown" 
                  DragEnter="NotesListView_DragEnter" 
-                 Drop="NotesListView_Drop" KeyDown="NotesListView_KeyDown">
+                 Drop="NotesListView_Drop" 
+                 KeyDown="NotesListView_KeyDown">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical"
                                 Width="100"
                                 Height="100">
-                        <Image Source="{Binding Image}"
+                        <Image Source="{Binding ImageBitmap}"
                                Width="75"
                                Height="75"/>
                         <Label Content="{Binding Name}"

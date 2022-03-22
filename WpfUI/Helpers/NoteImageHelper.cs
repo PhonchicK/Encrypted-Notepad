@@ -10,7 +10,7 @@ namespace WpfUI.Helpers
     internal static class NoteImageHelper
     {
         private static List<FileExtensions> filesAndExtensions = new List<FileExtensions>()
-        { 
+        {
             new FileExtensions()
             {
                 Image = "image.png",
@@ -56,6 +56,11 @@ namespace WpfUI.Helpers
                 }
             }
             return "file.png";
+        }
+
+        internal static bool IsImage(string name)
+        {
+            return filesAndExtensions[0].Extensions.Contains(Path.GetExtension(name));
         }
     }
     internal class FileExtensions

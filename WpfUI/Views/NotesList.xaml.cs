@@ -11,6 +11,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using WpfUI.Helpers;
 using WpfUI.Models;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace WpfUI.Views
 {
@@ -61,7 +63,16 @@ namespace WpfUI.Views
             {
                 foreach (var item in noteService.GetAllByFolderID(folder.ID))
                 {
-                    notesViewModels.Add(new NotesViewModel(item));
+                    //if note is a image when in a folder
+                    if (NoteImageHelper.IsImage(item.Name))
+                    {
+                        BitmapImage image = ConvertHelper.ByteArrayToBitmapImage(NoteCryptionHelper.DecryptFile(item.Content, folderPassword));
+                        notesViewModels.Add(new NotesViewModel(item, image));
+                    }
+                    else
+                    {
+                        notesViewModels.Add(new NotesViewModel(item));
+                    }
                 }
             }
             else
@@ -72,7 +83,16 @@ namespace WpfUI.Views
                 }
                 foreach (var item in noteService.GetAllTopFolder())
                 {
-                    notesViewModels.Add(new NotesViewModel(item));
+                    //If note is a image and don't have a password
+                    if (string.IsNullOrEmpty(item.Password) && NoteImageHelper.IsImage(item.Name))
+                    {
+                        BitmapImage image = ConvertHelper.ByteArrayToBitmapImage(NoteCryptionHelper.DecryptFile(item.Content));
+                        notesViewModels.Add(new NotesViewModel(item, image));
+                    }
+                    else
+                    {
+                        notesViewModels.Add(new NotesViewModel(item));
+                    }
                 }
             }
 

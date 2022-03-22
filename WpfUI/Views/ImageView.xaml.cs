@@ -30,24 +30,7 @@ namespace WpfUI.Views
             InitializeComponent();
             currentNote = note;
             currentPassword = password;
-            imageBox.Source = LoadImage(NoteCryptionHelper.DecryptFile(note.Content, password));
-        }
-        private static BitmapImage LoadImage(byte[] imageData)
-        {
-            if (imageData == null || imageData.Length == 0) return null;
-            var image = new BitmapImage();
-            using (var mem = new MemoryStream(imageData))
-            {
-                mem.Position = 0;
-                image.BeginInit();
-                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.UriSource = null;
-                image.StreamSource = mem;
-                image.EndInit();
-            }
-            image.Freeze();
-            return image;
+            imageBox.Source = ConvertHelper.ByteArrayToBitmapImage(NoteCryptionHelper.DecryptFile(note.Content, password));
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e)
