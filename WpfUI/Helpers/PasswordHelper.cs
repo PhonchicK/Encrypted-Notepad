@@ -20,7 +20,7 @@ namespace WpfUI.Helpers
 
         public static bool PasswordControl(string encryptedPassword, string password)
         {
-            return Convert.ToBase64String(CryptionHelper.Decrypt(Convert.FromBase64String(encryptedPassword), password)) == PasswordString;
+            return CryptionHelper.Encrypt(Convert.FromBase64String(PasswordString), password) == encryptedPassword;
         }
     }
 }

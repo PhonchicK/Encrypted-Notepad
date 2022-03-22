@@ -49,6 +49,16 @@ namespace WpfUI.Views
         {
             return new TextRange(textBoxContent.Document.ContentStart, textBoxContent.Document.ContentEnd).Text;
         }
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch(e.Key)
+            {
+                case Key.S:
+                    if (Keyboard.Modifiers == ModifierKeys.Control)//Ctrl + S
+                        SaveNote();
+                    break;
+            }
+        }
 
         #region Note Methods
         private void LoadNote()

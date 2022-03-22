@@ -20,6 +20,8 @@ namespace WpfUI.Helpers
         {
             if (string.IsNullOrEmpty(password))
                 return encryptedText;
+            if (string.IsNullOrEmpty(encryptedText))
+                return "";
             byte[] data = CryptionHelper.Decrypt(Convert.FromBase64String(encryptedText), password);
             return Convert.ToBase64String(data, 0, data.Length);
         }

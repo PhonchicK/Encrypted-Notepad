@@ -119,6 +119,22 @@ namespace WpfUI.Views
                 MainWindow.instance.OpenNote(note);
             }
         }
+        private void DeleteNote(NotesViewModel model)
+        {
+            if (MessageBox.Show("Do you want to delete " + model.Name, "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                if (!model.IsFolder)
+                {
+                    noteService.Delete(new Note() { ID = model.ID });
+                    LoadNotes();
+                }
+                else
+                {
+                    folderService.Delete(new Folder() { ID = model.ID });
+                    LoadNotes();
+                }
+            }
+        }
         private void NewNote()
         {
             namePasswordForm = new NamePasswordForm();
@@ -191,19 +207,18 @@ namespace WpfUI.Views
 
             LoadNotes();
         }
-        private void DownloadFile()
+        private void DownloadFile(NotesViewModel model)
         {
-            NotesViewModel note = (NotesListView.SelectedItem as NotesViewModel);
-            if (note == null)
+            if (model == null)
                 return;
 
             string password = "";
-            if (note.HavePassword)
+            if (model.HavePassword)
             {
                 passwordForm = new PasswordForm();
                 if (passwordForm.ShowDialog().GetValueOrDefault(false))
                 {
-                    if (PasswordHelper.PasswordControl(note.Password, passwordForm.Password))
+                    if (PasswordHelper.PasswordControl(model.Password, passwordForm.Password))
                         password = passwordForm.Password;
                     else
                         return;
@@ -213,12 +228,12 @@ namespace WpfUI.Views
             }
             saveFileDialog = new SaveFileDialog()
             {
-                FileName = note.Name,
-                Title = "Save " + note.Name
+                FileName = model.Name,
+                Title = "Save " + model.Name
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault(false))
             {
-                Note fileNote = noteService.GetByID(note.ID);
+                Note fileNote = noteService.GetByID(model.ID);
                 File.WriteAllBytes(saveFileDialog.FileName, NoteCryptionHelper.DecryptFile(fileNote.Content, password));
             }
             else
@@ -241,23 +256,14 @@ namespace WpfUI.Views
             {
                 OpenFolder(note);
             }
+            else
+            {
+                OpenNote(note);
+            }
         }
         private void NotesListContextMenuDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            NotesViewModel note = (NotesListView.SelectedItem as NotesViewModel);
-            if (MessageBox.Show("Do you want to delete " + note.Name, "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                if (!note.IsFolder)
-                {
-                    noteService.Delete(new Note() { ID = note.ID });
-                    LoadNotes();
-                }
-                else
-                {
-                    folderService.Delete(new Folder() { ID = note.ID });
-                    LoadNotes();
-                }
-            }
+            DeleteNote(NotesListView.SelectedItem as NotesViewModel);
         }
         private void NotesListContextMenuNewButton_Click(object sender, RoutedEventArgs e)
         {
@@ -270,7 +276,7 @@ namespace WpfUI.Views
         }
         private void NotesListContextMenuDownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            DownloadFile();
+            DownloadFile(NotesListView.SelectedItem as NotesViewModel);
         }
         #endregion
 
@@ -316,7 +322,15 @@ namespace WpfUI.Views
         }
         private void NotesListView_KeyDown(object sender, KeyEventArgs e)
         {
-            
+            switch(e.Key)
+            {
+                case Key.Enter:
+                    OpenNote(NotesListView.SelectedItem as NotesViewModel);
+                    break;
+                case Key.Delete:
+                    DeleteNote(NotesListView.SelectedItem as NotesViewModel);
+                    break;
+            }
         }
         #endregion
 
