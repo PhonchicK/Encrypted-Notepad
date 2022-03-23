@@ -11,7 +11,7 @@
         Loaded="Window_Loaded" 
         Background="#1e1e1e" 
         WindowStyle="None" 
-        AllowsTransparency="True">
+        AllowsTransparency="True" Closing="Window_Closing">
     <Grid>
         <DockPanel VerticalAlignment="Top" 
                    Height="35"

@@ -125,12 +125,12 @@ namespace WpfUI.Views
         {
             if (model.HavePassword)
             {
-                passwordForm = new PasswordForm();
-                if (passwordForm.ShowDialog().GetValueOrDefault(false))
+                string password = "";
+                if (GetPassword(ref password))
                 {
                     Note note = noteService.GetByID(model.ID);
-                    if (PasswordHelper.PasswordControl(note.Password, passwordForm.Password))
-                        MainWindow.instance.OpenNote(note, passwordForm.Password);
+                    if (PasswordHelper.PasswordControl(note.Password, password))
+                        MainWindow.instance.OpenNote(note, password);
                 }
             }
             else
@@ -157,7 +157,9 @@ namespace WpfUI.Views
         }
         private void NewNote()
         {
-            namePasswordForm = new NamePasswordForm();
+            namePasswordForm = new NamePasswordForm("", folder == null ? "" : folderPassword);
+            namePasswordForm.passwordBox.IsEnabled = folder == null;
+
             if (namePasswordForm.ShowDialog().GetValueOrDefault(false))
             {
                 noteService.Add(new Note()
@@ -205,27 +207,14 @@ namespace WpfUI.Views
 
             string password = "";
 
-            if (folder == null)
+            if (GetPassword(ref password))
             {
-                passwordForm = new PasswordForm(true);
-                if (passwordForm.ShowDialog().GetValueOrDefault(false))
-                {
-                    password = passwordForm.Password;
-                }
-                else
-                    return;
-            }
-            else
-            {
-                password = folderPassword;
-            }
-            //if in folder, password is folder's password
+                fileLoadForm = new FileLoadForm(files, password,
+                            folder?.ID);
+                fileLoadForm.ShowDialog();
 
-            fileLoadForm = new FileLoadForm(files, password,
-                        folder?.ID);
-            fileLoadForm.ShowDialog();
-
-            LoadNotes();
+                LoadNotes();
+            }
         }
         private void DownloadFile(NotesViewModel model)
         {
@@ -235,15 +224,7 @@ namespace WpfUI.Views
             string password = "";
             if (model.HavePassword)
             {
-                passwordForm = new PasswordForm();
-                if (passwordForm.ShowDialog().GetValueOrDefault(false))
-                {
-                    if (PasswordHelper.PasswordControl(model.Password, passwordForm.Password))
-                        password = passwordForm.Password;
-                    else
-                        return;
-                }
-                else
+                if (!GetPassword(ref password))
                     return;
             }
             saveFileDialog = new SaveFileDialog()
@@ -353,6 +334,24 @@ namespace WpfUI.Views
             }
         }
         #endregion
+
+        private bool GetPassword(ref string password)
+        {
+            if(folder != null)
+            {
+                password = folderPassword;
+                return true;
+            }
+
+            passwordForm = new PasswordForm();
+            if (passwordForm.ShowDialog().GetValueOrDefault(false))
+            {
+                password = passwordForm.Password;
+                return true;
+            }
+            else
+                return false;
+        }
 
         private void backButton_Click(object sender, RoutedEventArgs e)
         {

@@ -14,7 +14,7 @@ namespace WpfUI.Helpers
         {
             if (string.IsNullOrEmpty(password))
                 return text;
-            return CryptionHelper.Encrypt(Convert.FromBase64String(text), password);
+            return CryptionHelper.Encrypt(UTF8Encoding.UTF8.GetBytes(text), password);
         }
         public static string DecryptText(string encryptedText, string password)
         {
@@ -23,7 +23,7 @@ namespace WpfUI.Helpers
             if (string.IsNullOrEmpty(encryptedText))
                 return "";
             byte[] data = CryptionHelper.Decrypt(Convert.FromBase64String(encryptedText), password);
-            return Convert.ToBase64String(data, 0, data.Length);
+            return UTF8Encoding.UTF8.GetString(data, 0, data.Length);
         }
         #endregion
         #region File Cryption
